@@ -1,0 +1,14 @@
+#playerContainer {
+	float: left;
+	width: 600px;
+	height: 360px;
+}
+
+#slideContainer {
+	float: right;
+	width: 600px;
+}
+
+#slideContainer img {
+	width: 600px;
+}

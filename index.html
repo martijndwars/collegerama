@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Collegerama</title>
+
+        <link href="http://vjs.zencdn.net/4.10/video-js.css" rel="stylesheet" />
+        <link href="css/global.css" rel="stylesheet" />
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="http://vjs.zencdn.net/4.10/video.js"></script>
+        <script>
+        $(function () {
+            var player = videojs('player', { }, function() {
+                this.on('ended', function() {
+                    console.log('Awww...over so soon?');
+                });
+            });
+
+            $.getJSON('data/data.json', function (data) {
+                var stream = data.d.Presentation.Streams[0];
+                
+                stream.SlideBaseUrl
+                stream.SlideImageFileNameTemplate
+                stream.Slides.forEach(function (slide) {
+                    console.log(slide.Number + " => " + slide.Time);
+                });
+
+                $('video').bind('timeupdate', function () {
+                    var currentSlide = findSlide(this.currentTime);
+                    var slideFile = 'slide_' + pad(currentSlide.Number.toString(), 4) + '.jpg';
+
+                    // Update slide
+                    $('#slide').attr('src', 'slides/' + slideFile);
+                });
+
+                /**
+                 * Find slide corresponding to given time
+                 */
+                var findSlide = function (time) {
+                    for (slide in stream.Slides) {
+                        if (stream.Slides[slide].Time > (time*1000)) {
+                            console.log(stream.Slides[slide]);
+                            return stream.Slides[slide];
+                        }
+                    }
+                };
+            });
+        });
+
+        // TODO: Currently duplicated/also used for backend code
+        var pad = function (string, length) {
+            if (string.length < length) {
+                return 0 + pad(string, length-1);
+            } else {
+                return string;
+            }
+        }
+        </script>
+    </head>
+    <body>
+        <div id="playerContainer">
+            <video id="player" class="video-js vjs-default-skin" controls width="600" height="360" data-setup='{}'>
+                <source src="cc-12.mp4" type="video/mp4">
+                
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+            </video>
+        </div>
+        <div id="slideContainer">
+            <img id="slide" />
+        </div>
+    </body>
+</html>
