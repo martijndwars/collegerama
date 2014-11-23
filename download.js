@@ -64,3 +64,9 @@ var slides = function(data) {
 
 req.write(getPlayerOptionsRequestString);
 req.end();
+
+// Download the video
+var file = fs.createWriteStream('video.mp4');
+var request = https.get('https://collegerama-vs-stream-v6.tudelft.net/SmoothStreaming7/mp4/173ba0cf-d419-46ec-b453-66a886f0b669.mp4?playbackTicket=e01865c9c11c4375b5fbf2e5e6786e45&site=collegerama.tudelft.nl&sf-uniquify=1416734344651', function (res) {
+	res.pipe(file);
+});

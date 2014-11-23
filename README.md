@@ -15,5 +15,4 @@ Uses [video.js](http://www.videojs.com/) for brilliant HTML5 video. Use [node.js
 
 # Todo
 
-- Actually download the movie (currently, only slides are downloaded)
 - Use embedded NodeJS webserver instead of relying on external webserver
