@@ -3,9 +3,11 @@ var https = require('https');
 var fs = require('fs');
 var utils = require('./utils.js');
 
+var resourceId = '5acf0cf7333441b4b518bb3125253a131d';
+
 var getPlayerOptionsRequest = {
 	'getPlayerOptionsRequest': {
-		'ResourceId': '5acf0cf7333441b4b518bb3125253a131d',
+		'ResourceId': resourceId,
 		'QueryString': '',
 		'UseScreenReader': false,
 		'UrlReferrer': ''
@@ -38,16 +40,17 @@ var req = http.request(options, function(res) {
 			if (err) {
 				throw err;
 			} else {
-				slides(data);
+				var resultObject = JSON.parse(data);
+
+				slides(resultObject);
+				video(resultObject);
 			}
 		});
 	});
 });
 
-var slides = function(data) {
-	var resultObject = JSON.parse(data);
-	
-	var stream = resultObject.d.Presentation.Streams[0];
+var slides = function (data) {
+	var stream = data.d.Presentation.Streams[0];
 	var slideBaseURL = stream.SlideBaseUrl;
 	var slideImageFileNameTemplate = stream.SlideImageFileNameTemplate;
 	
@@ -62,11 +65,13 @@ var slides = function(data) {
 	});
 };
 
+var video = function (data) {
+	var stream = data.d.Presentation.Streams[1];
+	var file = fs.createWriteStream('video.mp4');
+	var request = https.get(stream.VideoUrls[0].Location, function (res) {
+		res.pipe(file);
+	});
+};
+
 req.write(getPlayerOptionsRequestString);
 req.end();
-
-// Download the video
-var file = fs.createWriteStream('video.mp4');
-var request = https.get('https://collegerama-vs-stream-v6.tudelft.net/SmoothStreaming7/mp4/173ba0cf-d419-46ec-b453-66a886f0b669.mp4?playbackTicket=e01865c9c11c4375b5fbf2e5e6786e45&site=collegerama.tudelft.nl&sf-uniquify=1416734344651', function (res) {
-	res.pipe(file);
-});
