@@ -23,7 +23,7 @@
 
                 // Sync current slide with video time
                 $('video').bind('timeupdate', function () {
-                    var currentSlide = findSlide(this.currentTime);
+                    var currentSlide = findSlide(this.currentTime*1000);
                     var slideFile = 'slide_' + pad(currentSlide.Number.toString(), 4) + '.jpg';
 
                     // Update slide
@@ -35,7 +35,7 @@
                  */
                 var findSlide = function (time) {
                     return _.findLast(slides, function (slide) {
-                        return slide.Time < (time*1000);
+                        return slide.Time < time;
                     });
                 };
             });
