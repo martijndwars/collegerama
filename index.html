@@ -3,11 +3,12 @@
     <head>
         <title>Collegerama</title>
 
-        <link href="http://vjs.zencdn.net/4.10/video-js.css" rel="stylesheet" />
+        <link href="//vjs.zencdn.net/4.10/video-js.css" rel="stylesheet" />
         <link href="css/global.css" rel="stylesheet" />
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="http://vjs.zencdn.net/4.10/video.js"></script>
+        <script src="//vjs.zencdn.net/4.10/video.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.compat.js"></script>
         <script>
         $(function () {
             var player = videojs('player', { }, function() {
@@ -18,13 +19,9 @@
 
             $.getJSON('data/data.json', function (data) {
                 var stream = data.d.Presentation.Streams[0];
-                
-                stream.SlideBaseUrl
-                stream.SlideImageFileNameTemplate
-                stream.Slides.forEach(function (slide) {
-                    console.log(slide.Number + " => " + slide.Time);
-                });
+                var slides = stream.Slides;
 
+                // Sync current slide with video time
                 $('video').bind('timeupdate', function () {
                     var currentSlide = findSlide(this.currentTime);
                     var slideFile = 'slide_' + pad(currentSlide.Number.toString(), 4) + '.jpg';
@@ -37,12 +34,9 @@
                  * Find slide corresponding to given time
                  */
                 var findSlide = function (time) {
-                    for (slide in stream.Slides) {
-                        if (stream.Slides[slide].Time > (time*1000)) {
-                            console.log(stream.Slides[slide]);
-                            return stream.Slides[slide];
-                        }
-                    }
+                    return _.findLast(slides, function (slide) {
+                        return slide.Time < (time*1000);
+                    });
                 };
             });
         });
