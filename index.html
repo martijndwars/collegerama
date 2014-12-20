@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Collegerama</title>
 
-        <link href="//vjs.zencdn.net/4.10/video-js.css" rel="stylesheet" />
+        <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="bower_components/video.js/dist/video-js/video-js.min.css" rel="stylesheet" />
         <link href="css/global.css" rel="stylesheet" />
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="//vjs.zencdn.net/4.10/video.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.compat.js"></script>
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/video.js/dist/video-js/video.js"></script>
+        <script src="bower_components/lodash/dist/lodash.min.js"></script>
         <script>
         $(function () {
             var player = videojs('player', { }, function() {
@@ -17,27 +18,54 @@
                 });
             });
 
-            $.getJSON('data/data.json', function (data) {
-                var stream = data.d.Presentation.Streams[0];
-                var slides = stream.Slides;
+            var map = {
+                2: '632826481fec41dcae399c3f51f7adef1d',
+                3: 'acfd4d17679f44188d71470af5dd9e4e1d',
+                4: '37b73bc3154a4b5abf00ae3d75e066051d',
+                5: 'd451c22d7e894ad191c28f56c7d27aa31d',
+                6: 'fbcc143c813e4c93b82686ea0639ddd11d',
+                7: '21fd7db4c34346059cca67903991b7761d',
+                8: '45b11b38096848d09d7ed79fc4d4fd561d',
+                9: 'c25e6f932e8e4262994a2b37f23cce621d',
+                10: 'c9fd58f7297645e6a3aa87b6c7578c401d', // missing slides
+                11: '75325fe001a44c58817a983f66b376ea1d',
+                12: '5acf0cf7333441b4b518bb3125253a131d',
+                13: '23c483f3255d411381c3ee583a8967451d'
+            };
 
-                // Sync current slide with video time
-                $('video').bind('timeupdate', function () {
-                    var currentSlide = findSlide(this.currentTime*1000);
-                    var slideFile = 'slide_' + pad(currentSlide.Number.toString(), 4) + '.jpg';
+            $('.lecture').click(function () {
+                var nr = $(this).data('nr');
+                var lectureId = map[nr];
+                var basePath = 'lectures/'+ lectureId;
 
-                    // Update slide
-                    $('#slide').attr('src', 'slides/' + slideFile);
-                });
+                $.getJSON(basePath + '/data/data.json', function (data) {
+                    var stream = data.d.Presentation.Streams[0];
+                    var slides = stream.Slides;
 
-                /**
-                 * Find slide corresponding to given time
-                 */
-                var findSlide = function (time) {
-                    return _.findLast(slides, function (slide) {
-                        return slide.Time < time;
+                    // Set video file
+                    $('video').attr('src', basePath + '/video.mp4');
+
+                    // Sync current slide with video time
+                    $('video').bind('timeupdate', function () {
+                        var currentSlide = findSlide(this.currentTime*1000);
+
+                        if (currentSlide) {
+                            var slideFile = 'slide_' + pad(currentSlide.Number.toString(), 4) + '.jpg';
+
+                            // Update slide
+                            $('.slide').attr('src', basePath + '/slides/' + slideFile);
+                        }
                     });
-                };
+
+                    /**
+                     * Find slide corresponding to given time
+                     */
+                    var findSlide = function (time) {
+                        return _.findLast(slides, function (slide) {
+                            return slide.Time < time;
+                        });
+                    };
+                });
             });
         });
 
@@ -52,17 +80,42 @@
         </script>
     </head>
     <body>
-        <div id="playerContainer">
-            <video id="player" class="video-js vjs-default-skin" controls width="600" height="360" data-setup='{}'>
-                <source src="video.mp4" type="video/mp4">
-                
-                <p class="vjs-no-js">
-                    To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                </p>
-            </video>
-        </div>
-        <div id="slideContainer">
-            <img id="slide" />
+        <div class="container">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#" class="lecture" data-nr="2">Lecture 2</a></li>
+                            <li><a href="#" class="lecture" data-nr="3">Lecture 3</a></li>
+                            <li><a href="#" class="lecture" data-nr="4">Lecture 4</a></li>
+                            <li><a href="#" class="lecture" data-nr="5">Lecture 5</a></li>
+                            <li><a href="#" class="lecture" data-nr="6">Lecture 6</a></li>
+                            <li><a href="#" class="lecture" data-nr="7">Lecture 7</a></li>
+                            <li><a href="#" class="lecture" data-nr="8">Lecture 8</a></li>
+                            <li><a href="#" class="lecture" data-nr="9">Lecture 9</a></li>
+                            <li><a href="#" class="lecture" data-nr="10">Lecture 10</a></li>
+                            <li><a href="#" class="lecture" data-nr="11">Lecture 11</a></li>
+                            <li><a href="#" class="lecture" data-nr="12">Lecture 12</a></li>
+                            <li><a href="#" class="lecture" data-nr="13">Lecture 13</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <video id="player" class="video-js vjs-default-skin" controls width="600" height="360" data-setup='{}'>
+                        <source src="" type="video/mp4">
+                        
+                        <p class="vjs-no-js">
+                            To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                        </p>
+                    </video>
+                </div>
+                <div class="col-md-6">
+                    <img class="slide" />
+                </div>
+            </div>
         </div>
     </body>
 </html>

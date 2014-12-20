@@ -1,14 +1,13 @@
-#playerContainer {
-	float: left;
-	width: 600px;
-	height: 360px;
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-#slideContainer {
-	float: right;
-	width: 600px;
+.navbar {
+  margin-bottom: 20px;
+  font-size: 13px;
 }
 
-#slideContainer img {
-	width: 600px;
+.slide {
+	width: 100%;
 }

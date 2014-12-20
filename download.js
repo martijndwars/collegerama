@@ -1,9 +1,15 @@
 var http = require('http');
 var https = require('https');
-var fs = require('fs');
+var fs = require('graceful-fs');
 var utils = require('./utils.js');
 
-var resourceId = '5acf0cf7333441b4b518bb3125253a131d';
+if (undefined === process.argv[2]) {
+	console.log('Please provide a resourceId as argument (e.g. 5acf0cf7333441b4b518bb3125253a131d)');
+	process.exit(1);
+}
+
+var resourceId = process.argv[2];
+var basePath = 'lectures/'+resourceId;
 
 var getPlayerOptionsRequest = {
 	'getPlayerOptionsRequest': {
@@ -31,12 +37,12 @@ var options = {
 
 var req = http.request(options, function(res) {
 	// Save data file
-	var file = fs.createWriteStream('data/data.json');
+	var file = fs.createWriteStream(basePath + '/data/data.json');
 	res.pipe(file);
 
 	// On finishing, download slides
 	res.on('end', function () {
-		fs.readFile('data/data.json', function (err, data) {
+		fs.readFile(basePath + '/data/data.json', function (err, data) {
 			if (err) {
 				throw err;
 			} else {
@@ -58,7 +64,7 @@ var slides = function (data) {
 		var padded = utils.pad(slide.Number.toString(), 4);
 		var fileName = slideImageFileNameTemplate.replace('{0:D4}', padded);
 
-		var file = fs.createWriteStream('slides/' + fileName);
+		var file = fs.createWriteStream(basePath + '/slides/' + fileName);
 		var request = https.get(slideBaseURL + fileName, function (res) {
 		  res.pipe(file);
 		});
@@ -67,7 +73,7 @@ var slides = function (data) {
 
 var video = function (data) {
 	var stream = data.d.Presentation.Streams[1];
-	var file = fs.createWriteStream('video.mp4');
+	var file = fs.createWriteStream(basePath + '/video.mp4');
 	var request = https.get(stream.VideoUrls[0].Location, function (res) {
 		res.pipe(file);
 	});
