@@ -1,6 +1,8 @@
+var Q = require('q');
 var http = require('http');
 var https = require('https');
 var fs = require('graceful-fs');
+var mkdirp = require('mkdirp');
 var utils = require('./utils.js');
 
 if (undefined === process.argv[2]) {
@@ -10,6 +12,10 @@ if (undefined === process.argv[2]) {
 
 var resourceId = process.argv[2];
 var basePath = 'lectures/'+resourceId;
+
+Q.all([mkdirp(basePath + '/data'), mkdirp(basePath + '/slides')]).done(function () {
+	console.log('Directory structure setup!');
+});
 
 var getPlayerOptionsRequest = {
 	'getPlayerOptionsRequest': {

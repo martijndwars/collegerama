@@ -1,0 +1,24 @@
+{
+  "name": "collegerama",
+  "version": "1.0.0",
+  "description": "Collegerama lacks a 'watch this video offline' button. This project downloads the lecture and its slides and watch it in your browser.",
+  "main": "download.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MartijnDwars/collegerama.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MartijnDwars/collegerama/issues"
+  },
+  "homepage": "https://github.com/MartijnDwars/collegerama",
+  "dependencies": {
+    "graceful-fs": "^4.1.2",
+    "mkdirp": "^0.5.1",
+    "q": "^1.4.1"
+  }
+}
