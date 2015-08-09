@@ -2,11 +2,22 @@
 
 Collegerama lacks a 'watch this video offline' button. This project downloads the lecture and its slides and watch it in your browser.
 
-# Technology
+# Installation
 
-Uses [video.js](http://www.videojs.com/) for brilliant HTML5 video. Use [node.js](http://nodejs.org/) to download the video and slides.
+1. `git clone git@github.com:MartijnDwars/collegerama.git`
+2. `npm install`
+
+# Download
+
+If you just want to download the lecture, simply use `node download.js <resource-id>`. The resource id is the part next to 'Play' in the URL. For example, in:
+
+> https://collegerama.tudelft.nl/Mediasite/Play/23c483f3255d411381c3ee583a8967451d?catalog=528e5b24-a2fc-4def-870e-65bd84b28a8c
+
+it is *23c483f3255d411381c3ee583a8967451d*.
 
 # Usage
+
+If you want to use this as a local Collegerama clone:
 
 1. Figure out how to download the .mp4 for yourself
 2. Use `node download.js <resourceId>` to download the slides
@@ -14,7 +25,6 @@ Uses [video.js](http://www.videojs.com/) for brilliant HTML5 video. Use [node.js
   * Run some webserver that serves `index.html` (e.g. Apache, nginx)
   * Run Chrome with cross-origin check disabled (e.g `open /Applications/Google\ Chrome.app --args --allow-file-access-from-files`)
 
-The resourceId is the bold part of the following URL: https://collegerama.tudelft.nl/Mediasite/Play/*23c483f3255d411381c3ee583a8967451d*?catalog=528e5b24-a2fc-4def-870e-65bd84b28a8c
 
 # FAQ
 
