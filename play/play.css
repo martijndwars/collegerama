@@ -1,0 +1,58 @@
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: black;
+}
+
+.slide {
+  background-size: cover;
+  width: 80%;
+  height: 60%;
+  margin: 20px;
+}
+
+.container {
+  border: 5px solid grey;
+  border-radius: 25px;
+
+  height: 1300px;
+  width: 95%;
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;  
+}
+
+.row {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 100%;
+
+}
+
+.viewer-box {
+  display: flex;
+  flex-flow: row;
+}
+
+
+.viewer-player {
+  border: 5px solid grey;
+  border-radius: 25px;
+  margin: 20px;
+  padding: 10px;
+  width: fit-content;
+
+}
+
+.controller {
+  border: 5px solid grey;
+  border-radius: 25px;
+  margin: 20px;
+  width: 400px;
+  height: 200px;
+  display: block;
+  margin-top: auto;
+  margin-right: auto; 
+}

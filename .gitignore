@@ -3,3 +3,6 @@ node_modules
 
 # Bower
 bower_components/
+
+.DS_Store
+package-lock.json

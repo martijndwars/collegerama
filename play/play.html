@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Collegerama</title>
+
+        <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../bower_components/video.js/dist/video-js/video-js.min.css" rel="stylesheet" />
+        <link href="play.css" rel="stylesheet" />
+
+        <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="../bower_components/video.js/dist/video-js/video.js"></script>
+        <script src="../bower_components/lodash/dist/lodash.min.js"></script>
+        <script src="play.js"></script>
+
+    </head>
+    <body>
+        <div class="container">
+
+            <div class="row">
+                <div class="slide"></div>
+                <div class="viewer-box">
+                    <div class="viewer-player">
+                        <video id="player" class="video-js vjs-default-skin" controls width="600" height="360" data-setup='{}'>
+                            <source src="" type="video/mp4">
+                            
+                            <p class="vjs-no-js">
+                                To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                            </p>
+                        </video>
+                    </div>
+                    <div class="controller">
+                    </div>
+                      
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
