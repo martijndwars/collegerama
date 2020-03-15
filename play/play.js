@@ -1,9 +1,4 @@
 $(function () {
-    var player = videojs('player', { }, function() {
-        this.on('ended', function() {
-            console.log('Awww...over so soon?');
-        });
-    });
 
 
     $( document ).ready(function() {
@@ -17,12 +12,28 @@ $(function () {
         var basePath = '../lectures/'+ lectureId;
         console.log("Looking at path: " + basePath);
 
+        videojs("myplayer", {
+            playbackRates: [0.5, 1, 1.5, 2]
+        }, function() {
+            // Player (this) is initialized and ready.
+            var player = this;
+          
+            // Start playing the video.
+            player.play();
+            
+
+    
+            console.log(player);
+        });
+
         $.getJSON(basePath + '/data/data.json', function (data) {
             var stream = data.d.Presentation.Streams[0];
             var slides = stream.Slides;
 
             // Set video file
             $('video').attr('src', basePath + '/video.mp4');
+
+
 
             // Sync current slide with video time
             $('video').bind('timeupdate', function () {
@@ -46,6 +57,8 @@ $(function () {
             };
         });
     });
+
+    
 });
 
 // TODO: Currently duplicated/also used for backend code

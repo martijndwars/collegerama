@@ -6,6 +6,7 @@ body {
 
 .slide {
   background-size: cover;
+  background-color: red;
   width: 80%;
   height: 60%;
   margin: 20px;
@@ -15,7 +16,7 @@ body {
   border: 5px solid grey;
   border-radius: 25px;
 
-  height: 1300px;
+  height: 100vh;
   width: 95%;
 
   display: block;
@@ -44,15 +45,4 @@ body {
   padding: 10px;
   width: fit-content;
 
-}
-
-.controller {
-  border: 5px solid grey;
-  border-radius: 25px;
-  margin: 20px;
-  width: 400px;
-  height: 200px;
-  display: block;
-  margin-top: auto;
-  margin-right: auto; 
 }

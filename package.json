@@ -24,5 +24,8 @@
     "mkdirp": "^0.5.1",
     "q": "^1.4.1",
     "serve-index": "^1.9.1"
+  },
+  "devDependencies": {
+    "video.js": "^7.6.6"
   }
 }
