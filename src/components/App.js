@@ -7,16 +7,19 @@ import { BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/play" exact component={Play} />
-          <Route path="/lecture/:id" exact component={Lecture} />
-          <Route path="/download" exact component={Download} />
-        </Switch>
-      </div>
-    </Router>
+    <div className="App">
+      <Router>
+        <div className="container">
+          <Switch>
+              <Route path="/" exact component={Home} />
+              <Route path="/play" exact component={Play} />
+              <Route path="/lecture/:id" exact component={Lecture} />
+              <Route path="/download" exact component={Download} />
+          </Switch>
+        </div>
+          
+      </Router>
+    </div>
   );
 }
 

@@ -1,4 +1,7 @@
-.App {
-  text-align: center;
+.App, .container {
+  margin: 0;
+  height: 100%;
 }
+
+
 

@@ -2,6 +2,8 @@ import React from 'react';
 import './css/Lecture.css';
 import videojs from 'video.js'
 import Slide from './Slide';
+import Fullscreen from "react-full-screen";
+
 
 
 class Lecture extends React.Component {
@@ -12,13 +14,21 @@ class Lecture extends React.Component {
   
       this.state = {
         id: null,
-        time: null
+        time: null,
+        fullscreen: false,
+        screenHeight: null,
+        screenWidth: null
       }
     }
 
     componentDidMount () {
       const { id } = this.props.match.params
       this.setState({id : id});
+
+      this.updateDimensions();
+      window.addEventListener('resize', this.updateDimensions);
+
+
 
       const videoJsOptions = {
         autoplay: false,
@@ -36,6 +46,8 @@ class Lecture extends React.Component {
       });
 
 
+
+
       this.player.on('timeupdate', () => {
         var time = this.player.currentTime();
 
@@ -45,6 +57,8 @@ class Lecture extends React.Component {
       this.setState({player : this.player});
 
     }
+
+    
 
     onUpdate = (time) => {
       this.setState({
@@ -57,17 +71,42 @@ class Lecture extends React.Component {
       if (this.player) {
         this.player.dispose()
       }
+      window.removeEventListener('resize', this.updateDimensions);
     }
 
+    toggleFull = () => {
+      this.setState({ fullscreen: !this.state.fullscreen });
+    }
+
+    updateDimensions = () => {
+      this.setState({ screenHeight: window.innerHeight, screenWidth: window.innerWidth });
+    };
+
+    
+
     render() {
+        var videoStyle = {
+          height: 0.27*this.state.screenHeight, 
+          width:  0.48*this.state.screenHeight,
+        }
+
         return (
             <div className="Lecture">
-                <h1>Lecture</h1>
-                <p>{this.state.id}</p>
-                <div data-vjs-player>
-                  <video ref={ node => this.videoNode = node } className="video-js"></video>
+              <Fullscreen
+                enabled={this.state.fullscreen}
+                onChange={fullscreen => this.setState({fullscreen})}
+              >
+                <button className="fullscreenButton" onClick={this.toggleFull}></button>
+                <div className="SlideBox">
+                  <Slide id={this.props.match.params.id} time={this.state.time} screenHeight={this.state.screenHeight} screenWidth={this.state.screenWidth}></Slide>
                 </div>
-                <Slide id={this.props.match.params.id} time={this.state.time}/>
+                
+                <div className="videoBox">
+                  <div data-vjs-player style={videoStyle} >
+                    <video ref={ node => this.videoNode = node } className="video-js"></video>
+                  </div>
+                </div>
+              </Fullscreen>
             </div>
         );
     }

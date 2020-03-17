@@ -2,6 +2,8 @@ import React from 'react';
 import './css/Slide.css';
 
 
+
+
 class Slide extends React.Component {
 
     state = {
@@ -13,7 +15,12 @@ class Slide extends React.Component {
     componentWillMount () {
       const { id } = this.props;
       this.setState({id : id});
+
+
+
     }
+
+    
 
     componentWillReceiveProps () {
       this.updateImg(this.props.time);
@@ -79,19 +86,25 @@ class Slide extends React.Component {
 
 
     updateImg = (time) => {
-      console.log(time);
       this.getJson();
       this.setImg(time);
+    }
+
+    slideStyle = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'black',
+      padding: '10px',
+      borderRadius: '10px'
     }
 
 
   
     render() {
         return (
-            <div className="Slide">
-                <h1>Slide</h1>
-                <p>{this.state.id}</p>
-                <img className="slide" src={this.state.imgUrl}/>
+            <div className="Slide" style={this.slideStyle}>
+              <img src={this.state.imgUrl} style={{height: 0.65*this.props.screenHeight, width: 1.16*this.props.screenHeight}} className="img"></img>
             </div>
         );
     }
