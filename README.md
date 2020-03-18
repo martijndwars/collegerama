@@ -8,10 +8,18 @@ Collegerama offline viewer is a redesign of the repo [MartijnDwars/collegerama](
 ## Installation
 
 1. `git clone https://github.com/djosh34/collegerama-offline-viewer.git`
-2. `npm install`
-3. `npm start`
+2. `yarn install`
+3. `yarn run dev`
 
 
 ## Usage
 
-this project is still a work in progress, so a lot of the explination will come later.
+To open Collegerama offline viewer go to `localhost:3000`.
+
+### Downloading new lectures
+
+1. Find the id of the lecture you want to view (you can find it on the collegerama site)
+2. Go to `localhost:3000/download` and enter the id of the lecture
+3. Press submit and wait....
+4. Some flashing may occur, this is normal
+5. It's done when after a long time the screen flashes again

@@ -72,9 +72,10 @@ var addId = function (rootPath) {
 
     var listFile = rootPath + 'list.json';
                 
-    fs.readFile(listFile, function (err, data) {
+    fs.readFile(listFile, (err, data) => {
         if (err) {
-            console.log(err);
+			console.log(err);
+			createListJson(rootPath);
             return false;
         } else {
             var list = JSON.parse(data);
@@ -85,6 +86,23 @@ var addId = function (rootPath) {
             }
         }
     });
+}
+
+var createListJson = function (rootPath) {
+	var listFile = rootPath + 'list.json';
+	
+	var list = {
+		lectures: []
+	};
+
+	var data = JSON.stringify(list);
+
+
+    fs.writeFile(listFile, data);
+	console.log("written json",data);
+	
+	addId(rootPath);
+
 }
 
 
