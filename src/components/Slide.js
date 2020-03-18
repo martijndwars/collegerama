@@ -1,5 +1,6 @@
 import React from 'react';
 import './css/Slide.css';
+import Play from './Play';
 
 
 
@@ -44,8 +45,7 @@ class Slide extends React.Component {
 
         var slides = this.state.data.d.Presentation.Streams[0].Slides;
       
-        var currentSlide = this.findSlide(slides,time);
-        var slidePath = '/lectures/' + this.state.id + '/slides/slide_' + currentSlide + '.jpg';
+        var slidePath = this.findSlide(slides,time,this.state.data);
 
         this.setState({imgUrl:slidePath});
 
@@ -54,7 +54,7 @@ class Slide extends React.Component {
     
     }
 
-    findSlide = (slides,time) => {
+    findSlide = (slides,time,data) => {
       var biggestSlide = slides[0];
 
       for (var slide in slides) {
@@ -66,22 +66,31 @@ class Slide extends React.Component {
 
       var number = biggestSlide.Number;
 
-      if (number < 1000) {
-        number = "0" + number;
+      return this.getImg(this.state.id,data,number);
+    }
+
+    getImg = (id,json,n) => {
+      const baseTemplate = json.d.Presentation.Streams[0].SlideImageFileNameTemplate;
+
+
+      if (n < 1000) {
+        n = "0" + n;
       }
       
-      if (number < 100) {
-        number = "0" + number;
+      if (n < 100) {
+        n = "0" + n;
       }
 
-      if (number < 10) {
-        number = "0" + number;
+      if (n < 10) {
+        n = "0" + n;
       }
 
-      return number;
+      const url  = baseTemplate.replace(new RegExp('{.*}', 'gi'), n);
+
+      return '/lectures/' + id + '/slides/' + url; 
 
 
-    }
+  }
 
 
 
@@ -104,7 +113,7 @@ class Slide extends React.Component {
     render() {
         return (
             <div className="Slide" style={this.slideStyle}>
-              <img src={this.state.imgUrl} style={{height: 0.65*this.props.screenHeight, width: 1.16*this.props.screenHeight}} className="img"></img>
+              <img src={this.state.imgUrl} style={{height: 0.63*this.props.screenHeight, width: 1.12*this.props.screenHeight}} className="img"></img>
             </div>
         );
     }

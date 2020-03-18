@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import LectureCard from './LectureCard';
 
 
@@ -47,7 +46,7 @@ class Play extends React.Component {
     }
 
     getDisp = (val,json) => {
-        const imgUrl = this.getImg(val.id,json,0);
+        const imgUrl = this.getImg(val.id,json,1);
         const title = json.d.Presentation.Title;
         const to = '/lecture/' + val.id;
         

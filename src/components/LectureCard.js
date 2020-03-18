@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles({
   root: {
     maxWidth: 640,
+    margin: 10
   },
   link: {
     textDecoration: 'none'
