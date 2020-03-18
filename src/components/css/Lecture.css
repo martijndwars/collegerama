@@ -4,6 +4,7 @@
 
 .fullscreen {
     background-color: #222 !important;
+
   }
 
 .videoBox {
@@ -13,6 +14,7 @@
     padding: 10px;
     background-color: black;
     display: inline-block;
+
 }
 
 .fullscreenButton {
