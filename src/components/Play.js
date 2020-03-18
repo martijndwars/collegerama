@@ -14,9 +14,18 @@ class Play extends React.Component {
         display: []
     }
 
+    componentWillMount () {
+        document.body.style.overflow = "scroll";
+
+    }
 
     componentDidMount () {
         this.getJson();
+    }
+
+    componentWillUnmount () {
+        document.body.style.overflow = "hidden";
+
     }
 
     getJson = () => {

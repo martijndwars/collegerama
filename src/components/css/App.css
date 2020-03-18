@@ -5,27 +5,16 @@
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+  background-color: #222;
+
 }
 
 .home {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 100px;
 
-}
-
-.upperBar {
-  height: 100px;
-  background-color: #283593;
-  width: 100%;
-}
-
-.collegeramaLogo {
-  background: url(../assets/collegerama_logo.png) center no-repeat;
-  height: 100px;
-  width: 350px;
-  border:0;
-  
 
 }
 

@@ -2,7 +2,13 @@ html, body, #root {
     margin: 0;
     height: 100%;
     background-color: #222;
-    overflow: hidden;
 
 
 }
+
+body {
+    overflow: hidden;
+
+}
+
+
