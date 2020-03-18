@@ -11,16 +11,19 @@ const useStyles = makeStyles({
   root: {
     maxWidth: 640,
     margin: 10,
-    minHeight: 350
+    minHeight: 300,
+    padding: 30
   },
   link: {
     textDecoration: 'none'
   },
   media: {
-    height: 270,
-    width: 480
+    height: 180,
+    width: 320,
+    margin: 20
   },
   text: {
+      margin: 30,
       textAlign: 'center'
   }
 });
@@ -32,11 +35,10 @@ export default function LectureCard({imgUrl,Title,to}) {
     <Link to={to} className={classes.link}>
         <Card className={classes.root}>
             <CardActionArea>
-            <CardMedia
+            <img
                 className={classes.media}
-                image={imgUrl}
-                title={Title}
-            />
+                src={imgUrl}
+            ></img>
             <CardContent>
                 <Typography gutterBottom variant="h5" component="h2" className={classes.text}>
                     {Title}

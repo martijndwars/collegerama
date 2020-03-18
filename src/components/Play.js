@@ -1,5 +1,7 @@
 import React from 'react';
 import LectureCard from './LectureCard';
+import UpperBar from './UpperBar';
+
 
 
 import './css/Play.css';
@@ -87,9 +89,13 @@ class Play extends React.Component {
 
 
         return (
-            <div className="Play">
-                {this.state.display}
+            <div>
+                <UpperBar></UpperBar>
+                <div className="Play">
+                    {this.state.display}
+                </div>
             </div>
+            
         );
     }
 }

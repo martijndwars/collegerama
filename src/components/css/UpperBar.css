@@ -1,0 +1,16 @@
+.upperBar {
+    height: 100px;
+    background-color: #283593;
+    width: 100%;
+  }
+  
+  .collegeramaLogo {
+    background: url(../assets/collegerama_logo.png) center no-repeat;
+    height: 100px;
+    width: 350px;
+    border:0;
+    
+  
+  }
+  
+  

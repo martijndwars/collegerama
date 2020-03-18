@@ -8,6 +8,10 @@
 
   }
 
+.upperBox {
+    display: none;
+}
+
 .videoBox {
     margin: 30px;
     margin-bottom: 40px;
