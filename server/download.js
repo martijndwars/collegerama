@@ -1,6 +1,7 @@
 
 
 var Q = require('q');
+var request = require("request");
 var http = require('http');
 var https = require('https');
 var fs = require('graceful-fs');
@@ -8,7 +9,7 @@ var mkdirp = require('mkdirp');
 var utils = require('./utils.js');
 
 
-console.log("id ", process.argv[2]);
+//console.log("id ", process.argv[2]);
 
 if (undefined === process.argv[2]) {
 	console.log('Please provide a resourceId as argument (e.g. 5acf0cf7333441b4b518bb3125253a131d)');
@@ -18,10 +19,12 @@ if (undefined === process.argv[2]) {
 var resourceId = process.argv[2];
 var rootPath = __dirname.replace('server','') + 'public/lectures/'
 var basePath = rootPath + resourceId;
+var size = 0;
+var cur = 0;
+var listFile = rootPath + 'list.json';
+var tried = false;
 
-Q.all([mkdirp(basePath + '/data'), mkdirp(basePath + '/slides')]).done(function () {
-	console.log('Directory structure setup!');
-});
+
 
 var getPlayerOptionsRequest = {
 	'getPlayerOptionsRequest': {
@@ -47,30 +50,89 @@ var options = {
 	headers: headers
 };
 
+var createDataDirs = (callback) => {
+
+	fs.mkdir(basePath, () => {
+		fs.mkdir(basePath + '/data', () => {
+			fs.mkdir(basePath + '/slides', callback)
+		})
+	})
+	
+}
+
 var req = http.request(options, function(res) {
-	// Save data file
-	var file = fs.createWriteStream(basePath + '/data/data.json');
-	res.pipe(file);
 
-	// On finishing, download slides
-	res.on('end', function () {
-		fs.readFile(basePath + '/data/data.json', function (err, data) {
-			if (err) {
-				throw err;
-			} else {
-				var resultObject = JSON.parse(data);
+	createDataDirs(function () {
+		//console.log('Directory structure setup!');
 
-				slides(resultObject);
-				video(resultObject);
-			}
+		// Save data file
+		var file = fs.createWriteStream(basePath + '/data/data.json');
+		res.pipe(file);
+
+		file.on('error', (err) => {
+			console.log(err);
+			process.exit(1);
+
+		})
+
+		
+
+		// On finishing, download slides
+		file.on('finish', function () {
+			fs.readFile(file.path, (err, data) => {
+				if (err !== null) {
+					console.log("data.json error:", err);
+					console.log("path: ", file.path);
+					process.exit(1);
+					
+				} else {	
+					var resultObject = JSON.parse(data);
+					console.log("Starting download",resourceId);
+
+					
+					slides(resultObject);
+					video(resultObject);
+				}
+
+			});
+		
+		
+
+
+
 		});
 	});
+
+	
+	return;	
 });
 
-var addId = function (rootPath) {
-    // Succesfull download, add id to list
 
-    var listFile = rootPath + 'list.json';
+var testReq = function (rootPath) {
+
+	var testRequest = http.request(options, (Incomming) => {
+		//console.log("status",Incomming.statusCode);
+
+		if (Incomming.statusCode === 200) {
+			//console.log("Success");
+			addId(rootPath, writeCallback);
+
+		} else {
+			console.log("Server couldn't find id");
+			process.exit(1);
+		}
+	
+	});
+
+	testRequest.write(getPlayerOptionsRequestString);
+	testRequest.end();
+
+
+}
+
+
+
+var addId = function (rootPath , callback) {
                 
     fs.readFile(listFile, (err, data) => {
         if (err) {
@@ -78,14 +140,18 @@ var addId = function (rootPath) {
 			createListJson(rootPath);
             return false;
         } else {
-            var list = JSON.parse(data);
-
-            if (createList(list,listFile)) {
-                req.write(getPlayerOptionsRequestString);
-                req.end();
-            }
+            callback(data);
         }
     });
+}
+
+var writeCallback = function (data) {
+	var list = JSON.parse(data);
+
+	if (isList(list)) {
+		req.write(getPlayerOptionsRequestString);
+		req.end();
+	}
 }
 
 var createListJson = function (rootPath) {
@@ -99,30 +165,42 @@ var createListJson = function (rootPath) {
 
 
     fs.writeFile(listFile, data);
-	console.log("written json",data);
+	console.log("written json file",data);
 	
-	addId(rootPath);
+	addId(rootPath, writeCallback);
 
 }
 
-
-var createList = function (list,listFile) {
-
-    for (var id in list.lectures) {
+var isList = function(list) {
+	for (var id in list.lectures) {
         if (list.lectures[id].id == resourceId) {    
             console.log("list.json already contains id",resourceId);
             process.exit(1)
         }
-    }
-
-    list.lectures.push({id: resourceId});
-    var data = JSON.stringify(list);
+	}
 
 
-    fs.writeFile(listFile, data);
-    console.log("written json",data);
+	
+	return true;
+}
 
-    return true;
+
+var createList = function (callback) {
+
+
+	addId(rootPath, function (data) {
+		var list = JSON.parse(data);
+
+		list.lectures.push({id: resourceId});
+		data = JSON.stringify(list);
+	
+		fs.writeFile(listFile, data, () => {
+			callback();
+		});
+
+	});
+
+	
 }
 
 var slides = function (data) {
@@ -144,17 +222,41 @@ var slides = function (data) {
 var video = function (data) {
 	var stream = data.d.Presentation.Streams[1];
 	var file = fs.createWriteStream(basePath + '/video.mp4');
+
+
+
 	var request = https.get(stream.VideoUrls[0].Location, function (res) {
-        res.pipe(file);
+		res.pipe(file);
+		
+		size = parseInt(res.headers['content-length'], 10);
+		cur = 0;
+		var total = size / 1048576;
+
+		setInterval(() => {
+			console.log("Downloading " + (100.0 * cur / size).toFixed(2) + "% " + (cur / 1048576).toFixed(2) + " MB" + " Total size: " + total.toFixed(2) + " MB");
+		},1000);
+
+		res.on("data", function(chunk) {
+			cur += chunk.length;
+		});
         
         res.on('end', function () {
-            console.log("done");
-            process.exit(0);
+			console.log("done");
+			createList(() => {
+				process.exit(0);
+			});
+
         });
 	});
 };
 
 
-addId(rootPath);
+
+try {
+ 	testReq(rootPath);
+} catch (err) {
+	console.log("error",err);
+	process.exit(1);
+}
 
 

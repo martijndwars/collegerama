@@ -11,18 +11,75 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(pino);
 
+let out = null;
+let lastMessage = null;
+let downloadId = null;
+
 app.get('/download.js', (req, res) => {
     const id = req.query.id || null;
     res.setHeader('Content-Type', 'application/json');
 
-    console.log(id);
 
-    if (id == null) res.send(JSON.stringify({ message: `No id given` }));
-
+    if (id == null) {
+        res.status(200).send(JSON.stringify({ message: `No id given` }));
+        return;
+    }
     
 
-    res.send(JSON.stringify({ message: `` }));
+
+    var filteredData = id.replace(/[^\w\s]/gi, '');
+
+    lastMessage = "Starting download: " + filteredData;
+
+
+    downloadId = filteredData;
+
+    out = child_process.spawn('node', ['server/download.js', filteredData]);
+
+    out.stdout.on('data', (data) => {
+        console.log('stdout: ' + data);
+        lastMessage = data.toString("utf8");
+    });
+
+    out.stderr.on('data', (data) => {
+        console.log('stderr: ' + data);
+    });
+
+    out.on('close', (code) => {
+        if (code === 1) {
+            console.log('stderr: ' + code);
+            return;
+        }
+
+
+        console.log('Done Downloading');
+
+        out = null;
+    });
+
+   
 });
+
+app.get('/isDownload', (req, res) => {
+    //console.log("isDownload");
+
+    if (lastMessage !== null) {
+        res.status(200).send(JSON.stringify(lastMessage));
+        return;
+    }
+
+    if (out === null) {
+        res.status(200).send(JSON.stringify("Not Downloading"));
+        return;
+    }
+
+
+    res.status(200).send(JSON.stringify("Starting download: " + downloadId));
+
+
+});
+
+
 
 
 var server = http.createServer(app).listen(3001, () =>
@@ -39,25 +96,10 @@ io.on('connection', function(socket) {
     }
 
     socket.on('input',function (data) {
-        var filteredData = data.replace(/[^\w\s]/gi, '');
 
-        console.log(filteredData);
+        
+
     
-        sendBack("Downloading: " + filteredData);
-
-        var out = child_process.spawnSync('node', ['server/download.js', filteredData]);
-        console.log('status: ' + out.status);
-        console.log('stdout: ' + out.stdout.toString('utf8'));
-        console.log('stderr: ' + out.stderr.toString('utf8'));
-        console.log();
-
-        if (out.stderr != null) {
-            console.log("failure");
-            sendBack(out.stdout.toString('utf8'));
-            return;
-        }
-    
-        sendBack("success");
 
 
     });

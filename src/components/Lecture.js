@@ -31,7 +31,7 @@ class Lecture extends React.Component {
 
 
       const videoJsOptions = {
-        autoplay: false,
+        autoplay: true,
         controls: true,
         playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2, 2.25],
         sources: [{
