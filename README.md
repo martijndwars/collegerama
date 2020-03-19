@@ -8,8 +8,9 @@ Collegerama offline viewer is a redesign of the repo [MartijnDwars/collegerama](
 ## Installation
 
 1. `git clone https://github.com/djosh34/collegerama-offline-viewer.git`
-2. `yarn install`
-3. `yarn run dev`
+2. `cd collegerama-offline-viewer`
+3. `yarn install`
+4. `yarn run dev`
 
 
 ## Usage
