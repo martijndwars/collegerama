@@ -24,6 +24,7 @@
     "react-full-screen": "^0.2.4",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
+    "requirejs": "^2.3.6",
     "socket.io": "^2.3.0",
     "uws": "^100.0.1",
     "video.js": "^7.6.6"

@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/Lecture.css';
-import videojs from 'video.js'
+import videojs from 'video.js';
 import Slide from './Slide';
 import Fullscreen from "react-full-screen";
 
@@ -28,6 +28,8 @@ class Lecture extends React.Component {
       this.updateDimensions();
       window.addEventListener('resize', this.updateDimensions);
 
+      document.addEventListener('keydown', this.handleKeyDown);
+
 
 
       const videoJsOptions = {
@@ -43,6 +45,7 @@ class Lecture extends React.Component {
 
       this.player = videojs(this.videoNode, videoJsOptions, function onPlayerReady() {
         console.log('onPlayerReady', this)
+        
       });
 
 
@@ -81,6 +84,33 @@ class Lecture extends React.Component {
     updateDimensions = () => {
       this.setState({ screenHeight: window.innerHeight, screenWidth: window.innerWidth });
     };
+
+    handleKeyDown = (event) => {
+      var code = event.which;
+
+      if (code === 39) {
+        this.setTimePlayer(5);
+      }
+
+      if (code === 37) {
+        this.setTimePlayer(-5);
+      }
+
+      if (code === 32) {
+        if (this.player.paused() === false) {
+          this.player.pause();
+          return;
+        }
+        this.player.play();
+
+
+      }
+
+    }
+
+    setTimePlayer = (deltaTime) => {
+      this.player.currentTime(this.player.currentTime() + deltaTime);
+    }
 
     
 
