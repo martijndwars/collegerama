@@ -4,8 +4,9 @@ import Play from './Play';
 
 
 
-
 class Slide extends React.Component {
+
+    timeCorrection = 15;
 
     state = {
       id: null,
@@ -59,7 +60,7 @@ class Slide extends React.Component {
 
       for (var slide in slides) {
 
-        if (biggestSlide.Time < slides[slide].Time && slides[slide].Time < time*1000) {
+        if (biggestSlide.Time < slides[slide].Time && slides[slide].Time < (time + this.timeCorrection)*1000) {
               biggestSlide = slides[slide];
         }
       }
