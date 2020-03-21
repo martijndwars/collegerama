@@ -97,7 +97,7 @@ class Lecture extends React.Component {
       }
 
       if (code === 32) {
-        if (this.player.paused() === false) {
+        if (this.player === null || this.player.paused() === false) {
           this.player.pause();
           return;
         }
