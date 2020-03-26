@@ -88,6 +88,8 @@ class Lecture extends React.Component {
     handleKeyDown = (event) => {
       var code = event.which;
 
+      if (this.player === null) return;
+
       if (code === 39) {
         this.setTimePlayer(5);
       }
@@ -97,7 +99,7 @@ class Lecture extends React.Component {
       }
 
       if (code === 32) {
-        if (this.player === null || this.player.paused() === false) {
+        if (this.player.paused() === false) {
           this.player.pause();
           return;
         }

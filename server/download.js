@@ -155,20 +155,22 @@ var writeCallback = function (data) {
 }
 
 var createListJson = function (rootPath) {
-	var listFile = rootPath + 'list.json';
+
+	fs.mkdir(rootPath, () => {
+
+		var listFile = rootPath + 'list.json';
 	
-	var list = {
-		lectures: []
-	};
-
-	var data = JSON.stringify(list);
-
-
-    fs.writeFile(listFile, data);
-	console.log("written json file",data);
+		var list = {
+			lectures: []
+		};
 	
-	addId(rootPath, writeCallback);
-
+		var data = JSON.stringify(list);
+	
+		fs.writeFile(listFile, data);
+		console.log("written json file",data);
+		
+		addId(rootPath, writeCallback);
+	});
 }
 
 var isList = function(list) {
