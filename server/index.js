@@ -7,6 +7,8 @@ const { fork } = require('child_process');
 var http = require('http');
 var sys = require('sys')
 var child_process = require('child_process');
+const WebSocket = require('ws');
+
 
 const app = express();
 
@@ -16,73 +18,9 @@ app.use(pino);
 
 
 
-let out = null;
 let lastMessage = null;
 let downloadId = null;
 
-app.get('/download.js', (req, res) => {
-    const id = req.query.id || null;
-    res.setHeader('Content-Type', 'application/json');
-
-
-    if (id == null) {
-        res.status(200).send(JSON.stringify({ message: `No id given` }));
-        return;
-    }
-    
-
-
-    var filteredData = id.replace(/[^\w\s]/gi, '');
-
-    lastMessage = "Starting download: " + filteredData;
-
-
-    downloadId = filteredData;
-
-    out = child_process.spawn('node', ['server/download.js', filteredData]);
-
-    out.stdout.on('data', (data) => {
-        console.log('stdout: ' + data);
-        lastMessage = data.toString("utf8");
-    });
-
-    out.stderr.on('data', (data) => {
-        console.log('stderr: ' + data);
-    });
-
-    out.on('close', (code) => {
-        if (code === 1) {
-            console.log('stderr: ' + code);
-            return;
-        }
-
-
-        console.log('Done Downloading');
-
-        out = null;
-    });
-
-   
-});
-
-app.get('/isDownload', (req, res) => {
-    //console.log("isDownload");
-
-    if (lastMessage !== null) {
-        res.status(200).send(JSON.stringify(lastMessage));
-        return;
-    }
-
-    if (out === null) {
-        res.status(200).send(JSON.stringify("Not Downloading"));
-        return;
-    }
-
-
-    res.status(200).send(JSON.stringify("Starting download: " + downloadId));
-
-
-});
 
 app.get('/list.json', (req, res) => {
 
@@ -101,61 +39,71 @@ app.get('/list.json', (req, res) => {
 })
 
 
-function getFiles(req,res) {
-    const filePath = (__dirname + req.path).replace('collegerama/server/','');
-    console.log(filePath);
 
-    try {
-        const file = fs.readFileSync(filePath);
-        res.status(200).send(file);
-    } catch (err) {
-        res.status(404).send('Unable to download this file, did you download this lecture?: ' + err);
-    }
+
+
+var server = http.createServer(app);
+const io = new WebSocket.Server({server});
+var children = [];
+
+
+function killall() {
+    children.forEach(function(child) {
+        child.kill();
+    });
 }
 
-
-
-// app.get('/lectures/*/data/data.json', (req, res) => {
-//     getFiles(req,res);
-// })
-
-// app.get('/lectures/*/slides*', (req, res) => {
-//     getFiles(req,res);
-// })
-
-// app.get('/lectures/*/video.mp4', (req, res) => {
-//     getFiles(req,res);
-// })
-
-
-
-
-var server = http.createServer(app).listen(3001, () =>
-    console.log('Express server is running on localhost:3001')
-);
-
-
-var io = require('socket.io')(server);
-
 io.on('connection', function(socket) {
+    console.log("connection is open");
 
-    function sendBack(data) {
-        socket.emit('output',data);
-    }
 
-    socket.on('input',function (data) {
 
-        
 
-    
+    socket.on('message',function (data) {
+        const downloadId = data;
+
+        killall();
+
+        let out = null;
+
+
+        out = child_process.spawn('node', ['server/download.js', downloadId]);
+        children.push(out);
+
+        out.stdout.on('data', (data) => {
+            console.log('stdout: ' + data);
+            if (socket.readyState === socket.OPEN) socket.send(data.toString());
+        });
+
+        out.on('close', (code,err) => {
+            if (code === 1) {
+                console.log('stderr: ' + err);
+                return;
+            }
+
+            console.log("process was killed");
+            if (socket.readyState === socket.OPEN) socket.send("Done");
+            
+
+            out = null;
+
+        });
 
 
     });
 
-    
-
     socket.on('disconnect', function() {
-        console.log("Disconnected");
+        console.log("Client has Disconnected");
+        killall();
+
+
+    });
+
+    socket.on('close', function() {
+        console.log("socket was succesfully closed");
+        killall();
+
+
     });
 
 
@@ -167,4 +115,8 @@ io.on('connection', function(socket) {
 
 
 });
+
+server.listen(3001, () =>
+    console.log('Express server is running on localhost:3001')
+);
 

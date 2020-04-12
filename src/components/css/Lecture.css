@@ -6,7 +6,13 @@
 .fullscreen {
     background-color: #222 !important;
 
-  }
+}
+
+.fullscreenButton {
+    outline: none !important;
+
+}
+
 
 .upperBox {
     display: none;

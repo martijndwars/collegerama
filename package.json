@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "body-parser": "^1.19.0",
+    "bootstrap": "^4.4.1",
     "express": "^4.17.1",
     "express-pino-logger": "^4.0.0",
     "fs": "^0.0.1-security",
@@ -20,6 +21,7 @@
     "pino-colada": "^1.5.1",
     "q": "^1.5.1",
     "react": "^16.13.0",
+    "react-bootstrap": "^1.0.0",
     "react-dom": "^16.13.0",
     "react-full-screen": "^0.2.4",
     "react-router-dom": "^5.1.2",
@@ -27,7 +29,8 @@
     "requirejs": "^2.3.6",
     "socket.io": "^2.3.0",
     "uws": "^100.0.1",
-    "video.js": "^7.6.6"
+    "video.js": "^7.6.6",
+    "websocket": "^1.0.31"
   },
   "nodemonConfig": {
     "ignore": [

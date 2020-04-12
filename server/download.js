@@ -19,8 +19,6 @@ if (undefined === process.argv[2]) {
 var resourceId = process.argv[2];
 var rootPath = __dirname.replace('collegerama/server','') + 'lectures/'
 
-console.log(rootPath);
-
 
 var basePath = rootPath + resourceId;
 var size = 0;
