@@ -1,0 +1,61 @@
+.Lecture {
+    height: 100%;
+    width: 100%;
+}
+
+.fullscreen {
+    background-color: #222 !important;
+
+  }
+
+.upperBox {
+    display: none;
+}
+
+.videoBox {
+    margin: 30px;
+    margin-bottom: 40px;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: black;
+    display: inline-block;
+
+}
+
+.fullscreenButton {
+    background: url(../assets/open_fullscreen_inactive.svg) no-repeat;
+    background-color: transparent;
+    background-size: contain;
+
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+
+    height: 50px;
+    width: 50px;
+    margin: 20px;
+
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.fullscreenButton:hover {
+    background: url(../assets/open_fullscreen_active.svg) no-repeat;
+}
+
+.fullscreen-enabled .fullscreenButton {
+    background: url(../assets/close_fullscreen_inactive.svg) no-repeat;
+}
+
+.fullscreen-enabled .fullscreenButton:hover {
+    background: url(../assets/close_fullscreen_active.svg) no-repeat;
+}
+
+.SlideBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}

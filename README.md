@@ -1,31 +1,26 @@
-# Intro
+# Collegerama
+
+## Info
 
 Collegerama lacks a 'watch this video offline' button. This project downloads the lecture and its slides and watch it in your browser.
+Collegerama offline viewer is a redesign of the repo [MartijnDwars/collegerama](https://github.com/MartijnDwars/collegerama) and uses a lot of code from that project.
 
-# Installation
+## Installation
 
-1. `git clone git@github.com:MartijnDwars/collegerama.git`
-2. `npm install`
-
-# Download
-
-If you just want to download the lecture, simply use `node download.js <resource-id>`. The resource id is the part next to 'Play' in the URL. For example, in:
-
-> https://collegerama.tudelft.nl/Mediasite/Play/23c483f3255d411381c3ee583a8967451d?catalog=528e5b24-a2fc-4def-870e-65bd84b28a8c
-
-it is *23c483f3255d411381c3ee583a8967451d*.
-
-# Usage
-
-If you want to use this as a local Collegerama clone:
-
-1. Figure out how to download the .mp4 for yourself
-2. Use `node download.js <resourceId>` to download the slides
-3. Serve `index.html`
-  * Run some webserver that serves `index.html` (e.g. Apache, nginx)
-  * Run Chrome with cross-origin check disabled (e.g `open /Applications/Google\ Chrome.app --args --allow-file-access-from-files`)
+1. `git clone https://github.com/djosh34/collegerama-offline-viewer.git`
+2. `cd collegerama-offline-viewer`
+3. `yarn install`
+4. `yarn run dev`
 
 
-# FAQ
+## Usage
 
-- You might need to increase the file descriptor limit. See http://stackoverflow.com/questions/34588/how-do-i-change-the-number-of-open-files-limit-in-linux
+To open Collegerama offline viewer go to `localhost:3000`.
+
+### Downloading new lectures
+
+1. Find the id of the lecture you want to view (you can find it on the collegerama site)
+2. Go to `localhost:3000/download` and enter the id of the lecture
+3. Press submit and wait....
+4. Some flashing may occur, this is normal
+5. It's done when after a long time the screen flashes again

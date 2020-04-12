@@ -1,0 +1,37 @@
+.Download {
+  text-align: center;
+  background-color: white;
+  margin: 30px;
+  padding: 50px;
+  padding-top: 10px;
+  border-radius: 30px;
+  font-family: roboto;
+
+}
+
+
+.italic {
+  font-style: italic;
+}
+
+.input {
+  margin: 10px;
+  height: 30px;
+  width: 300px;
+}
+
+button {
+  background-color: #4caf50;
+  width: 120px;
+  height: 40px;
+  border-radius: 10px;
+  color: white;
+  font-family: roboto;
+  font-weight: bold;
+  font-size: medium;
+
+  background-size: contain;
+  border: none;
+  cursor:pointer;
+  outline:none;
+}
