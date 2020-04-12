@@ -2,14 +2,19 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 var fs = require('graceful-fs');
+const path = require('path');
 const { fork } = require('child_process');
 var http = require('http');
 var sys = require('sys')
 var child_process = require('child_process');
 
 const app = express();
+
+app.use('/lectures',express.static(path.join(__dirname, '/../../lectures')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(pino);
+
+
 
 let out = null;
 let lastMessage = null;
@@ -78,6 +83,49 @@ app.get('/isDownload', (req, res) => {
 
 
 });
+
+app.get('/list.json', (req, res) => {
+
+    const directoryPath = __dirname.replace('collegerama/server','') + 'lectures/'
+
+
+    try {
+        const files = fs.readdirSync(directoryPath);
+        const fileList = files.filter(file => file !== ".DS_Store");
+        res.status(200).send(JSON.stringify(fileList));
+    } catch (err) {
+        res.status(404).send('Unable to scan lectures direcetory, did you download any lectures?: ' + err);
+    }
+
+
+})
+
+
+function getFiles(req,res) {
+    const filePath = (__dirname + req.path).replace('collegerama/server/','');
+    console.log(filePath);
+
+    try {
+        const file = fs.readFileSync(filePath);
+        res.status(200).send(file);
+    } catch (err) {
+        res.status(404).send('Unable to download this file, did you download this lecture?: ' + err);
+    }
+}
+
+
+
+// app.get('/lectures/*/data/data.json', (req, res) => {
+//     getFiles(req,res);
+// })
+
+// app.get('/lectures/*/slides*', (req, res) => {
+//     getFiles(req,res);
+// })
+
+// app.get('/lectures/*/video.mp4', (req, res) => {
+//     getFiles(req,res);
+// })
 
 
 

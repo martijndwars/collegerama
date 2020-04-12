@@ -30,16 +30,20 @@ class Play extends React.Component {
 
     getJson = () => {
 
-        fetch('../lectures/list.json')
+        fetch('/list.json')
             .then((r) => r.json())
-            .then((data) => this.getTitle(data));
+            .then((data) => {
+                console.log(data);
+                return this.getTitle(data);
+            });
     }
 
     getTitle = async (data) => {
                 
-        await data.lectures.forEach(async (val) => {
-            const response = await fetch('../lectures/' + val.id + '/data/data.json');
+        await data.forEach(async (val) => {
+            const response = await fetch('../../lectures/' + val + '/data/data.json');
             const json = await response.json();
+            console.log(json);
 
 
 
@@ -57,9 +61,9 @@ class Play extends React.Component {
     }
 
     getDisp = (val,json) => {
-        const imgUrl = this.getImg(val.id,json,1);
+        const imgUrl = this.getImg(val,json,1);
         const title = json.d.Presentation.Title;
-        const to = '/lecture/' + val.id;
+        const to = '/lecture/' + val;
         
 
         return (<LectureCard to={to} Title={title} imgUrl={imgUrl}></LectureCard>);

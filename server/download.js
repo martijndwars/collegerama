@@ -17,7 +17,11 @@ if (undefined === process.argv[2]) {
 }
 
 var resourceId = process.argv[2];
-var rootPath = __dirname.replace('server','') + 'public/lectures/'
+var rootPath = __dirname.replace('collegerama/server','') + 'lectures/'
+
+console.log(rootPath);
+
+
 var basePath = rootPath + resourceId;
 var size = 0;
 var cur = 0;
@@ -52,18 +56,62 @@ var options = {
 
 var createDataDirs = (callback) => {
 
-	fs.mkdir(basePath, () => {
-		fs.mkdir(basePath + '/data', () => {
-			fs.mkdir(basePath + '/slides', callback)
+	fs.mkdir(rootPath, () => {
+		fs.mkdir(basePath, () => {
+			fs.mkdir(basePath + '/data', () => {
+				fs.mkdir(basePath + '/slides', callback)
+			})
 		})
 	})
+
+	
 	
 }
 
+
+
+
+try {
+	testReq(rootPath);
+} catch (err) {
+   console.log("error",err);
+   process.exit(1);
+}
+
+
+// checks if id exists
+function testReq(rootPath) {
+
+	var testRequest = http.request(options, (Incomming) => {
+		//console.log("status",Incomming.statusCode);
+
+		if (Incomming.statusCode === 200) {
+			//console.log("Success");
+			req.write(getPlayerOptionsRequestString);
+			req.end();
+
+		} else {
+			console.log("Server couldn't find id");
+			process.exit(1);
+		}
+	
+	});
+
+	testRequest.write(getPlayerOptionsRequestString);
+	testRequest.end();
+
+
+}
+
+
+
+
+// meat of application
+// will download the data.json file
 var req = http.request(options, function(res) {
 
+
 	createDataDirs(function () {
-		//console.log('Directory structure setup!');
 
 		// Save data file
 		var file = fs.createWriteStream(basePath + '/data/data.json');
@@ -108,102 +156,8 @@ var req = http.request(options, function(res) {
 });
 
 
-var testReq = function (rootPath) {
-
-	var testRequest = http.request(options, (Incomming) => {
-		//console.log("status",Incomming.statusCode);
-
-		if (Incomming.statusCode === 200) {
-			//console.log("Success");
-			addId(rootPath, writeCallback);
-
-		} else {
-			console.log("Server couldn't find id");
-			process.exit(1);
-		}
-	
-	});
-
-	testRequest.write(getPlayerOptionsRequestString);
-	testRequest.end();
 
 
-}
-
-
-
-var addId = function (rootPath , callback) {
-                
-    fs.readFile(listFile, (err, data) => {
-        if (err) {
-			console.log(err);
-			createListJson(rootPath);
-            return false;
-        } else {
-            callback(data);
-        }
-    });
-}
-
-var writeCallback = function (data) {
-	var list = JSON.parse(data);
-
-	if (isList(list)) {
-		req.write(getPlayerOptionsRequestString);
-		req.end();
-	}
-}
-
-var createListJson = function (rootPath) {
-
-	fs.mkdir(rootPath, () => {
-
-		var listFile = rootPath + 'list.json';
-	
-		var list = {
-			lectures: []
-		};
-	
-		var data = JSON.stringify(list);
-	
-		fs.writeFile(listFile, data);
-		console.log("written json file",data);
-		
-		addId(rootPath, writeCallback);
-	});
-}
-
-var isList = function(list) {
-	for (var id in list.lectures) {
-        if (list.lectures[id].id == resourceId) {    
-            console.log("list.json already contains id",resourceId);
-            process.exit(1)
-        }
-	}
-
-
-	
-	return true;
-}
-
-
-var createList = function (callback) {
-
-
-	addId(rootPath, function (data) {
-		var list = JSON.parse(data);
-
-		list.lectures.push({id: resourceId});
-		data = JSON.stringify(list);
-	
-		fs.writeFile(listFile, data, () => {
-			callback();
-		});
-
-	});
-
-	
-}
 
 var slides = function (data) {
 	var stream = data.d.Presentation.Streams[0];
@@ -244,21 +198,13 @@ var video = function (data) {
         
         res.on('end', function () {
 			console.log("done");
-			createList(() => {
-				process.exit(0);
-			});
-
-        });
+			process.exit(0);
+	     });
 	});
 };
 
 
 
-try {
- 	testReq(rootPath);
-} catch (err) {
-	console.log("error",err);
-	process.exit(1);
-}
+
 
 
