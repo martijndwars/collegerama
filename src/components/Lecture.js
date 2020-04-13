@@ -78,7 +78,6 @@ class Lecture extends React.Component {
           this.slidePlayer.currentTime(time);
         }
 
-        console.log(this.player.remainingTime());
 
         if (1 > this.player.remainingTime()) {
           if (!this.state.finalPause) {
@@ -195,9 +194,9 @@ class Lecture extends React.Component {
         }
 
         var slideStyle = {
-          height: 0.61*this.state.screenHeight, 
-          width: 0.6*this.state.screenWidth,
-          
+          height: 0.60*this.state.screenHeight, 
+          width: 0.64*this.state.screenWidth,
+          backgroundColor: "transparent"
         }
 
         return (
@@ -210,8 +209,8 @@ class Lecture extends React.Component {
                 <div className="SlideBox">
                   {this.state.slidePic ? <Slide id={this.props.match.params.id} ref={this.slidePic} time={this.state.time} screenHeight={this.state.screenHeight} screenWidth={this.state.screenWidth}></Slide> : null}
                   {this.state.slidePic ? null : 
-                    <div className="videoBox" style={slideStyle} >
-                      <div data-vjs-player >
+                    <div className="videoBox mt-0"  >
+                      <div data-vjs-player style={slideStyle} >
                         <video ref={ node => this.slideVideoNode = node } className="video-js"></video>
                       </div>
                     </div>
