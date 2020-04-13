@@ -36,7 +36,7 @@ class Lecture extends React.Component {
       const videoJsOptions = {
         autoplay: true,
         controls: true,
-        playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2, 2.25],
+        playbackRates: [0.8, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2],
         sources: [{
           src: server + '/lectures/' + id + '/video.mp4',
           type: 'video/mp4'
@@ -100,11 +100,21 @@ class Lecture extends React.Component {
       }
 
       if (code === 32) {
-        if (this.player.paused() === false) {
-          this.player.pause();
-          return;
+
+        try {
+          if (this.player.paused() === false) {
+            this.player.pause();
+            return;
+          }
+          this.player.play();
+        } catch (error) {
+          if (!error.message.includes("Cannot read property 'paused' of null")) {
+            console.log("Player wasn't initialized " + error.message);
+          }
         }
-        this.player.play();
+
+
+        
 
 
       }
