@@ -140,6 +140,7 @@ var req = http.request(options, function(res) {
 					
 					slides(resultObject);
 					video(resultObject);
+					slideVideo(resultObject);
 				}
 
 			});
@@ -175,6 +176,40 @@ var slides = function (data) {
 	});
 };
 
+var slideVideo = function (data) {
+	var stream = data.d.Presentation.Streams[0];
+	var file = fs.createWriteStream(basePath + '/slide.mp4');
+
+
+
+	var request = https.get(stream.VideoUrls[0].Location, function (res) {
+		res.pipe(file);
+		
+		let size = parseInt(res.headers['content-length'], 10);
+		let cur = 0;
+		let total = size / 1048576;
+
+		let interval = setInterval(() => {
+			console.log("Slides " + (100.0 * cur / size).toFixed(2) + "% " + (cur / 1048576).toFixed(2) + " MB" + " Total size: " + total.toFixed(2) + " MB");
+		},1000);
+
+		res.on("data", function(chunk) {
+			cur += chunk.length;
+		});
+
+		res.on("error", () => {
+			console.log("No slideVideo available");
+			return;
+		});
+        
+        res.on('end', function () {
+			console.log("slideVideo done");
+			clearInterval(interval);
+			return;
+	     });
+	});
+};
+
 var video = function (data) {
 	var stream = data.d.Presentation.Streams[1];
 	var file = fs.createWriteStream(basePath + '/video.mp4');
@@ -184,11 +219,11 @@ var video = function (data) {
 	var request = https.get(stream.VideoUrls[0].Location, function (res) {
 		res.pipe(file);
 		
-		size = parseInt(res.headers['content-length'], 10);
-		cur = 0;
-		var total = size / 1048576;
+		let size = parseInt(res.headers['content-length'], 10);
+		let cur = 0;
+		let total = size / 1048576;
 
-		setInterval(() => {
+		let interval = setInterval(() => {
 			console.log("Downloading " + (100.0 * cur / size).toFixed(2) + "% " + (cur / 1048576).toFixed(2) + " MB" + " Total size: " + total.toFixed(2) + " MB");
 		},1000);
 
@@ -198,7 +233,8 @@ var video = function (data) {
         
         res.on('end', function () {
 			console.log("done");
-			process.exit(0);
+			clearInterval(interval);
+			return;
 	     });
 	});
 };

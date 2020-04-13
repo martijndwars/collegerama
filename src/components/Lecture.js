@@ -15,6 +15,7 @@ class Lecture extends React.Component {
   
       this.state = {
         id: null,
+        slidePic: false,
         time: null,
         fullscreen: false,
         screenHeight: null,
@@ -30,6 +31,8 @@ class Lecture extends React.Component {
       window.addEventListener('resize', this.updateDimensions);
 
       document.addEventListener('keydown', this.handleKeyDown);
+
+
 
 
 
@@ -49,14 +52,60 @@ class Lecture extends React.Component {
         
       });
 
+      const slideVideoOptions = {
+        autoplay: true,
+        controls: false,
+        muted: true,
+        fluid : true,
+        sources: [{
+          src: server + '/lectures/' + id + '/slide.mp4',
+          type: 'video/mp4'
+        }]
+      
+      }
+
+      this.slidePlayer = videojs(this.slideVideoNode, slideVideoOptions, function onPlayerReady() {
+        console.log('SlideReady', this)        
+      });
 
 
+      this.setState({finalPause : false});
 
       this.player.on('timeupdate', () => {
         var time = this.player.currentTime();
 
+        if (0 < this.player.remainingTimeDisplay()) {
+          this.slidePlayer.currentTime(time);
+        }
+
+        console.log(this.player.remainingTime());
+
+        if (1 > this.player.remainingTime()) {
+          if (!this.state.finalPause) {
+            this.player.pause();
+            window.history.back();
+            this.setState({finalPause : true});
+          }
+        }
+
         this.onUpdate(time);
+
+
       });
+
+      this.player.on('error', (error) => {
+        console.log("error",error);
+      })
+
+      this.player.on('pause', () => {
+        this.slidePlayer.pause();
+      })
+
+      this.slidePlayer.on('error', () => {
+        this.setState({slidePic: true});
+      })
+
+  
 
       this.setState({player : this.player});
 
@@ -123,7 +172,12 @@ class Lecture extends React.Component {
 
     setTimePlayer = (deltaTime) => {
       try {
-        this.player.currentTime(this.player.currentTime() + deltaTime);
+
+        if (1 < this.player.remainingTime() - deltaTime) {
+          this.player.currentTime(this.player.currentTime() + deltaTime);
+        }
+
+
       } catch (error) {
         if (!error.message.includes("Cannot read property 'currentTime' of null")) {
           console.log("Player wasn't initialized " + error.message);
@@ -140,6 +194,12 @@ class Lecture extends React.Component {
           width:  0.48*this.state.screenHeight,
         }
 
+        var slideStyle = {
+          height: 0.61*this.state.screenHeight, 
+          width: 0.6*this.state.screenWidth,
+          
+        }
+
         return (
             <div className="Lecture">
               <Fullscreen
@@ -148,7 +208,16 @@ class Lecture extends React.Component {
               >
                 <button className="fullscreenButton" onClick={this.toggleFull}></button>
                 <div className="SlideBox">
-                  <Slide id={this.props.match.params.id} time={this.state.time} screenHeight={this.state.screenHeight} screenWidth={this.state.screenWidth}></Slide>
+                  {this.state.slidePic ? <Slide id={this.props.match.params.id} ref={this.slidePic} time={this.state.time} screenHeight={this.state.screenHeight} screenWidth={this.state.screenWidth}></Slide> : null}
+                  {this.state.slidePic ? null : 
+                    <div className="videoBox" style={slideStyle} >
+                      <div data-vjs-player >
+                        <video ref={ node => this.slideVideoNode = node } className="video-js"></video>
+                      </div>
+                    </div>
+                  }
+
+                  
                 </div>
                 
                 <div className="videoBox">
