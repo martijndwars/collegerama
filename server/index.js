@@ -31,12 +31,22 @@ let downloadId = null;
 
 app.get('/list.json', (req, res) => {
 
-    const directoryPath = path.join(__dirname,'../../lectures');
+    const directoryPath = path.join(__dirname,'../../lectures/');
 
 
     try {
-        const files = fs.readdirSync(directoryPath);
+        var files = fs.readdirSync(directoryPath)
+        .map(function(v) { 
+            return { name:v,
+                time:fs.statSync(directoryPath + v).mtime.getTime()
+            };
+         })
+         .sort(function(a, b) { return b.time - a.time; })
+         .map(function(v) { return v.name; });
+        
         const fileList = files.filter(file => file !== ".DS_Store");
+
+
         res.status(200).send(JSON.stringify(fileList));
     } catch (err) {
         res.status(404).send('Unable to scan lectures direcetory, did you download any lectures?: ' + err);
@@ -90,7 +100,10 @@ io.on('connection', function(socket) {
 
         out.stdout.on('data', (data) => {
             console.log('stdout: ' + data);
-            if (socket.readyState === socket.OPEN) socket.send(data.toString());
+            if (socket.readyState === socket.OPEN &&
+                !data.toString().includes("Slides")) {                
+                    socket.send(data.toString());
+            }
         });
 
         out.on('close', (code,err) => {

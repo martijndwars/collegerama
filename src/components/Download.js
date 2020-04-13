@@ -87,6 +87,8 @@ class Download extends React.Component {
                     alt="id"
                     src="/img/url.png"
                   />
+
+                  <p className="mt-2">To abort, refresh the page</p>
                 <Form>   
                     <Form.Group controlId="id" >                  
                       <Form.Control 
