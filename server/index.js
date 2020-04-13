@@ -31,7 +31,7 @@ let downloadId = null;
 
 app.get('/list.json', (req, res) => {
 
-    const directoryPath = __dirname.replace('collegerama/server','') + 'lectures/'
+    const directoryPath = path.join(__dirname,'../../lectures');
 
 
     try {

@@ -2,6 +2,7 @@
 
 var Q = require('q');
 var request = require("request");
+const path = require('path');
 var http = require('http');
 var https = require('https');
 var fs = require('graceful-fs');
@@ -17,7 +18,8 @@ if (undefined === process.argv[2]) {
 }
 
 var resourceId = process.argv[2];
-var rootPath = __dirname.replace('collegerama/server','') + 'lectures/'
+var rootPath = path.join(__dirname,'../../lectures');
+
 
 
 var basePath = rootPath + resourceId;
