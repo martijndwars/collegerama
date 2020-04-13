@@ -18,7 +18,7 @@ if (undefined === process.argv[2]) {
 }
 
 var resourceId = process.argv[2];
-var rootPath = path.join(__dirname,'../../lectures');
+var rootPath = path.join(__dirname,'/../../lectures/');
 
 
 
