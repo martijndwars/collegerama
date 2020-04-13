@@ -4,6 +4,7 @@ import videojs from 'video.js';
 import Slide from './Slide';
 import Fullscreen from "react-full-screen";
 
+const server = "http://localhost:3001";
 
 
 class Lecture extends React.Component {
@@ -37,7 +38,7 @@ class Lecture extends React.Component {
         controls: true,
         playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2, 2.25],
         sources: [{
-          src: '/lectures/' + id + '/video.mp4',
+          src: server + '/lectures/' + id + '/video.mp4',
           type: 'video/mp4'
         }]
       
@@ -111,7 +112,14 @@ class Lecture extends React.Component {
     }
 
     setTimePlayer = (deltaTime) => {
-      this.player.currentTime(this.player.currentTime() + deltaTime);
+      try {
+        this.player.currentTime(this.player.currentTime() + deltaTime);
+      } catch (error) {
+        if (!error.message.includes("Cannot read property 'currentTime' of null")) {
+          console.log("Player wasn't initialized " + error.message);
+        }
+      }
+      
     }
 
     

@@ -37,22 +37,6 @@ class Download extends React.Component {
         
     }
 
-    isDownload = () => {
-      fetch(`/isDownload`)
-        .then(response => response.json())
-        .then(state => this.setState({message: state}))
-        .catch(error => console.log(error));
-      console.log("asking for download");
-
-      if (this.state.message.toString().includes("done") ||
-          this.state.message.toString().includes("Server couldn't find id")) {
-        if (this.interval !== null) {
-          clearInterval(this.interval);
-          this.interval = null;
-        }
-      }
-    }
-
   
     handleChange(event) {
       this.setState({ id: event.target.value });

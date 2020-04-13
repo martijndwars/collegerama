@@ -7,6 +7,8 @@ import UpperBar from './UpperBar';
 import './css/Play.css';
 import 'video.js/dist/video-js.css';
 
+const server = "http://localhost:3001";
+
 
 class Play extends React.Component {
     
@@ -29,8 +31,9 @@ class Play extends React.Component {
     }
 
     getJson = () => {
+        console.log(server + '/list.json');
 
-        fetch('/list.json')
+        fetch(server + '/list.json')
             .then((r) => r.json())
             .then((data) => {
                 console.log(data);
@@ -41,7 +44,7 @@ class Play extends React.Component {
     getTitle = async (data) => {
                 
         await data.forEach(async (val) => {
-            const response = await fetch('../../lectures/' + val + '/data/data.json');
+            const response = await fetch(server + '/lectures/' + val + '/data/data.json');
             const json = await response.json();
             console.log(json);
 
@@ -87,7 +90,7 @@ class Play extends React.Component {
   
         const url  = baseTemplate.replace(new RegExp('{.*}', 'gi'), n);
 
-        return '/lectures/' + id + '/slides/' + url; 
+        return server + '/lectures/' + id + '/slides/' + url; 
 
 
     }

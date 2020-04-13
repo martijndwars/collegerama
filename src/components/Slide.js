@@ -3,6 +3,7 @@ import './css/Slide.css';
 import Play from './Play';
 
 
+const server = "http://localhost:3001";
 
 class Slide extends React.Component {
 
@@ -30,7 +31,7 @@ class Slide extends React.Component {
 
     getJson = () => {
 
-      fetch('../lectures/' + this.state.id + '/data/data.json')
+      fetch(server + '/lectures/' + this.state.id + '/data/data.json')
           .then((r) => r.json())
           .then((data) => {
               if (this.state.data != data) {
@@ -88,7 +89,7 @@ class Slide extends React.Component {
 
       const url  = baseTemplate.replace(new RegExp('{.*}', 'gi'), n);
 
-      return '/lectures/' + id + '/slides/' + url; 
+      return server + '/lectures/' + id + '/slides/' + url; 
 
 
   }

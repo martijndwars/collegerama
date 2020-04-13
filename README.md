@@ -5,12 +5,12 @@
 Collegerama lacks a 'watch this video offline' button. This project can download lectures and its slides and can view it in your browser.
 This repo is a fork of the repo [MartijnDwars/collegerama](https://github.com/MartijnDwars/collegerama).
 
-## Installation
+## Installation (No development)
 
 1. `git clone https://github.com/djosh34/collegerama.git`
 2. `cd collegerama`
 3. `yarn install`
-4. `yarn run dev`
+4. `yarn run start`
 
 
 ## Usage
@@ -32,3 +32,7 @@ To open Collegerama offline viewer go to `localhost:3000`.
 2. Select `Search videos`
 3. Select your downloaded lecture from the list
 4. Enjoy!
+
+## Development
+
+To run the development server run `yarn run dev`

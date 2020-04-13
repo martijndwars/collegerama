@@ -8,10 +8,17 @@ var http = require('http');
 var sys = require('sys')
 var child_process = require('child_process');
 const WebSocket = require('ws');
+var cors = require('cors');
 
 
 const app = express();
 
+var corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200 
+}
+
+app.use(cors(corsOptions));
 app.use('/lectures',express.static(path.join(__dirname, '/../../lectures')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(pino);
@@ -67,7 +74,18 @@ io.on('connection', function(socket) {
         let out = null;
 
 
-        out = child_process.spawn('node', ['server/download.js', downloadId]);
+        var downloadExecPath = path.join(__dirname,'./download.js');
+
+        console.log(downloadExecPath);
+
+        
+        if (!downloadExecPath.includes("server")) {
+            downloadExecPath = path.join(__dirname,'./server/download.js');
+        }
+
+        console.log(downloadExecPath);
+        out = child_process.spawn('node', [downloadExecPath, downloadId]);
+
         children.push(out);
 
         out.stdout.on('data', (data) => {

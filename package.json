@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^7.1.2",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.4.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-pino-logger": "^4.0.0",
     "fs": "^0.0.1-security",
@@ -37,14 +38,23 @@
       "public"
     ]
   },
+  "bin" : {
+    "server" : "./server/index.js"
+  },
   "scripts": {
-    "start": "react-scripts start",
+    "startReact": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "node-env-run server --exec nodemon | pino-colada",
-    "dev": "run-p server start"
+    "serverDev": "node-env-run server --exec nodemon | pino-colada",
+    "server" : "node server/index.js",
+    "dev": "run-p serverDev startReact",
+    "start": "run-p server startReact"
   },
+  "processors": [
+    "stylelint-my-processor"
+  ],
+  "rules": {},
   "eslintConfig": {
     "extends": "react-app"
   },
