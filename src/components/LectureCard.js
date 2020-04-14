@@ -6,7 +6,7 @@ import { Card } from 'react-bootstrap';
 export default function LectureCard({imgUrl,Title,to}) {
 
   return (
-        <Card style={{ width: '30rem', height: '22rem'}} className="ml-5 mt-5">
+        <Card style={{ width: '30rem', height: '22rem'}} className="mx-3 mt-5">
           <Link to={to} className="text-reset text-decoration-none">
 
             <Card.Img 

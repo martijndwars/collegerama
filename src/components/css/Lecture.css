@@ -18,15 +18,24 @@
     display: none;
 }
 
-.videoBox {
+.innerVideoBox {
     margin: 30px;
     margin-bottom: 40px;
     border-radius: 10px;
     padding: 10px;
     background-color: black;
     display: inline-block;
+}
+
+
+.videoScreen {
+    bottom: 0;
+    left: 0;
+    margin:0;
 
 }
+
+
 
 .fullscreenButton {
     background: url(../assets/open_fullscreen_inactive.svg) no-repeat;
@@ -63,5 +72,5 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 5px;
 }

@@ -195,7 +195,7 @@ class Lecture extends React.Component {
 
         var slideStyle = {
           height: 0.60*this.state.screenHeight, 
-          width: 0.64*this.state.screenWidth,
+          width: 0.62*this.state.screenWidth,
           backgroundColor: "transparent"
         }
 
@@ -209,7 +209,7 @@ class Lecture extends React.Component {
                 <div className="SlideBox">
                   {this.state.slidePic ? <Slide id={this.props.match.params.id} ref={this.slidePic} time={this.state.time} screenHeight={this.state.screenHeight} screenWidth={this.state.screenWidth}></Slide> : null}
                   {this.state.slidePic ? null : 
-                    <div className="videoBox mt-0"  >
+                    <div className="innerVideoBox mb-1"  >
                       <div data-vjs-player style={slideStyle} >
                         <video ref={ node => this.slideVideoNode = node } className="video-js"></video>
                       </div>
@@ -219,12 +219,13 @@ class Lecture extends React.Component {
                   
                 </div>
                 
-                <div className="videoBox">
+                
+              </Fullscreen>
+              <div className="mb-3 ml-3 videoScreen innerVideoBox position-absolute">
                   <div data-vjs-player style={videoStyle} >
                     <video ref={ node => this.videoNode = node } className="video-js"></video>
                   </div>
                 </div>
-              </Fullscreen>
             </div>
         );
     }
