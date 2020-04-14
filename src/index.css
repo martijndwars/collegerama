@@ -2,13 +2,17 @@ html, body, #root {
     margin: 0;
     height: 100%;
     background-color: #222;
+    display: inline;
 
 
 }
 
 body {
     overflow: hidden;
+    overflow-x:hidden;
 
 }
+
+
 
 

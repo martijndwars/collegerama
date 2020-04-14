@@ -2,8 +2,6 @@ import React from 'react';
 import LectureCard from './LectureCard';
 import UpperBar from './UpperBar';
 
-
-
 import './css/Play.css';
 import 'video.js/dist/video-js.css';
 

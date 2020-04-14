@@ -23,6 +23,7 @@
     "q": "^1.5.1",
     "react": "^16.13.0",
     "react-bootstrap": "^1.0.0",
+    "react-device-detect": "^1.11.14",
     "react-dom": "^16.13.0",
     "react-full-screen": "^0.2.4",
     "react-router-dom": "^5.1.2",
@@ -38,8 +39,8 @@
       "public"
     ]
   },
-  "bin" : {
-    "server" : "./server/index.js"
+  "bin": {
+    "server": "./server/index.js"
   },
   "scripts": {
     "startReact": "react-scripts start",
@@ -47,7 +48,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serverDev": "node-env-run server --exec nodemon | pino-colada",
-    "server" : "node server/index.js",
+    "server": "node server/index.js",
     "dev": "run-p serverDev startReact",
     "start": "run-p server startReact"
   },

@@ -9,3 +9,12 @@
   
 }
 
+@media screen 
+and (orientation:landscape) 
+and (max-device-width: 1000px) {
+  
+    .Play {
+        margin-top: 0px !important;
+    }
+ }
+

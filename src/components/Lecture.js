@@ -3,6 +3,9 @@ import './css/Lecture.css';
 import videojs from 'video.js';
 import Slide from './Slide';
 import Fullscreen from "react-full-screen";
+import { isMobile } from "react-device-detect";
+import Controls from './Controls';
+
 
 const server = "http://localhost:3001";
 
@@ -38,7 +41,7 @@ class Lecture extends React.Component {
 
       const videoJsOptions = {
         autoplay: true,
-        controls: true,
+        controls: !isMobile,
         playbackRates: [0.8, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2],
         sources: [{
           src: server + '/lectures/' + id + '/video.mp4',
@@ -190,12 +193,13 @@ class Lecture extends React.Component {
     render() {
         var videoStyle = {
           height: 0.27*this.state.screenHeight, 
-          width:  0.48*this.state.screenHeight,
+          width: isMobile ? 0.23*this.state.screenWidth : 0.48*this.state.screenHeight,
+
         }
 
         var slideStyle = {
           height: 0.60*this.state.screenHeight, 
-          width: 0.62*this.state.screenWidth,
+          width: isMobile ? 0.7*this.state.screenWidth : 0.62*this.state.screenWidth,
           backgroundColor: "transparent"
         }
 
@@ -209,7 +213,7 @@ class Lecture extends React.Component {
                 <div className="SlideBox">
                   {this.state.slidePic ? <Slide id={this.props.match.params.id} ref={this.slidePic} time={this.state.time} screenHeight={this.state.screenHeight} screenWidth={this.state.screenWidth}></Slide> : null}
                   {this.state.slidePic ? null : 
-                    <div className="innerVideoBox mb-1"  >
+                    <div className="innerVideoBox slideScreen mb-1"  >
                       <div data-vjs-player style={slideStyle} >
                         <video ref={ node => this.slideVideoNode = node } className="video-js"></video>
                       </div>
@@ -220,13 +224,17 @@ class Lecture extends React.Component {
                 </div>
                 
                 
-              </Fullscreen>
+              {isMobile ? <Controls></Controls> : null}
+
               <div className="mb-3 ml-3 videoScreen innerVideoBox position-absolute">
                   <div data-vjs-player style={videoStyle} >
                     <video ref={ node => this.videoNode = node } className="video-js"></video>
                   </div>
                 </div>
+              </Fullscreen>
+
             </div>
+
         );
     }
 }

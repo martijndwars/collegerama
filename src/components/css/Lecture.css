@@ -18,6 +18,26 @@
     display: none;
 }
 
+@media screen 
+and (orientation:landscape) 
+and (max-device-width: 1000px) {
+  
+    .innerVideoBox {
+        background-color: transparent !important;
+        margin: 0px !important;
+        position: fixed;
+        top: 0
+    }
+
+    .slideScreen {
+        background-color: transparent !important;
+        margin: 0px !important;
+        position: fixed;
+        top: 0;
+        right: 0;
+    }
+ }
+
 .innerVideoBox {
     margin: 30px;
     margin-bottom: 40px;
