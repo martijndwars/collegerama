@@ -1,3 +1,7 @@
+**I not longer maintain this repository. See https://github.com/djosh34/collegerama for a new and improved version.**
+
+---
+
 # Intro
 
 Collegerama lacks a 'watch this video offline' button. This project downloads the lecture and its slides and watch it in your browser.
